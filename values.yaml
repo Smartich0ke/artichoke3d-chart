@@ -2,13 +2,126 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# I came here searching for something
+# But I don't remember what that thing is anymore
+# Did I dream you? Or are you dreaming me now?
+# As your waking thoughts gradually take over
+# As all dreams are ultimately forgotten
+# And lost...
+#
+# - Steve Wilson, "The Harmony Codex"
+
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: harbor.artichokenetwork.com/artichoke3d/artichoke3d-web
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "0.1.1"
+
+# The name of the app to be shown on web pages
+appName: "artichoke3d"
+
+# The production environment (should always be production)
+appEnv: "production"
+
+# Weather or not the app show detailed error messages
+appDebug: "false"
+
+# The URL where the app can be reached
+appUrl: "http://localhost"
+
+# Weather or not to use an external secret for the app key. If true, the key must be "app-key".
+appKey:
+  key: "base64:2eu61/Ld0YwEUgXYNrrO19fvKw2ylo6J+el0p3U5V4U="
+  useExistingSecret: false
+  existingSecretName: ""
+
+# Whether or not to create an initial admin user. If using external secret, keys bust be "email", "name", and "password".
+initialAdminUser:
+  useExistingSecret: false
+  existingSecretName: ""
+  name: "admin"
+  email: "admin@example.com"
+  password: "ChangeMeNow!"
+
+# Log settings
+logChannel: "stack"
+logLevel: "warning"
+
+# The database connection settings
+# Database configuration
+database:
+  externalDatabase: false
+  auth:
+    driver: "pgsql"
+    host: "ferrite-postgres"
+    port: "5432"
+    database: "ferrite"
+    username: "ferrite-user"
+    password: "ReallyStrongPassword"
+    useExistingSecret: false
+    existingSecretName: ""
+
+# PostgreSQL chart configuration
+postgresql:
+  enabled: true
+  auth:
+    username: artichoke3d
+    password: PleaseChangeMe!
+    database: artichoke3d
+  service:
+    ports:
+      postgres: 5432
+  # Other PostgreSQL configurations...
+
+# The cache, session and queue drivers
+cache:
+  driver: "redis"
+session:
+  driver: "redis"
+queue:
+  connection: "redis"
+
+# The redis connection settings
+redis:
+  externalRedis: false
+  driver: "predis"
+  auth:
+    host: "ferrite-redis"
+    password: ""
+    port: "6379"
+    useExistingSecret: false
+    existingSecretName: ""
+
+redischart:
+  enabled: true
+  auth:
+    password: "ReallyStrongPassword"
+  service:
+    ports:
+      redis: 6379
+  
+
+mail:
+  driver: "smtp"
+  host: "smtp.example.com"
+  port: "587"
+  username: "null"
+  password: "null"
+  encryption: "null"
+  useExistingSecret: false
+  existingSecretName: ""
+  from: 
+    address: "null"
+    name: "null"
+
+# Persistent volume settings
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 1Gi
 
 imagePullSecrets: []
 nameOverride: ""

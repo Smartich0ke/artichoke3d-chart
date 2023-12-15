@@ -22,3 +22,16 @@ version: 0.1.0
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 appVersion: "1.16.0"
+
+# Shitnami postgresql chart. I usually avoid Bitnami charts, but just in case.
+dependencies:
+  - name: postgresql
+    version: "13.2.24"  # Specify the version of the PostgreSQL chart you want to use
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: postgresql.enabled
+  
+  - name: redis
+    alias: redischart
+    version: "18.5.0"  # Specify the version of the Redis chart you want to use
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: redischart.enabled

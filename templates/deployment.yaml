@@ -27,12 +27,169 @@ spec:
       serviceAccountName: {{ include "artichoke3d.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: storage-volume
+          {{ if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{ else }}{{ include "artichoke3d.fullname" . }}-pvc{{ end }}
+          {{ else }}
+          emptyDir: {}
+          {{ end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          volumeMounts:
+            - name: storage-volume
+              mountPath: /var/www/html/storage/app
+          env:
+          - name: RUN_MIGRATIONS
+            value: "false"
+          - name: GENERATE_KEY
+            value: "false"
+          - name: APP_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.appKey.useExistingSecret }}{{ .Values.appKey.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-app-key{{ end }}
+                key: key
+          - name: APP_ENV
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: APP_ENV
+          - name: APP_DEBUG
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: APP_DEBUG
+          - name: APP_URL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: APP_URL
+          - name: APP_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: APP_NAME
+          - name: LOG_LEVEL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: LOG_LEVEL
+          - name: LOG_CHANNEL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: LOG_CHANNEL
+          - name: CACHE_DRIVER
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: CACHE_DRIVER
+          - name: QUEUE_CONNECTION
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: QUEUE_CONNECTION
+          - name: SESSION_DRIVER
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: SESSION_DRIVER
+          - name: DB_CONNECTION
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: DB_CONNECTION
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: DB_HOST
+          - name: DB_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: DB_PORT
+          - name: DB_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: DB_DATABASE
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.database.auth.useExistingSecret }}{{ .Values.database.auth.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-db-credentials{{ end }}
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.database.auth.useExistingSecret }}{{ .Values.database.auth.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-db-credentials{{ end }}
+                key: password
+          - name: REDIS_CONNECTION
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: REDIS_CONNECTION
+          - name: REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: REDIS_HOST
+          - name: REDIS_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: REDIS_PORT
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.redis.auth.useExistingSecret }}{{ .Values.redis.auth.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-redis-credentials{{ end }}
+                key: password
+          - name: MAIL_MAILER
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: MAIL_MAILER
+          - name: MAIL_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: MAIL_HOST
+          - name: MAIL_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: MAIL_PORT
+          - name: MAIL_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.mail.useExistingSecret }}{{ .Values.mail.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-mail-credentials{{ end }}
+                key: username
+          - name: MAIL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.mail.useExistingSecret }}{{ .Values.mail.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-mail-credentials{{ end }}
+                key: password
+          - name: MAIL_ENCRYPTION
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: MAIL_ENCRYPTION
+          - name: MAIL_FROM_ADDRESS
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: MAIL_FROM_ADDRESS
+          - name: MAIL_FROM_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: MAIL_FROM_NAME
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
