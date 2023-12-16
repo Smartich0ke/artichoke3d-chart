@@ -190,6 +190,36 @@ spec:
               configMapKeyRef:
                 name: {{ include "artichoke3d.fullname" . }}-config
                 key: MAIL_FROM_NAME
+          - name: GITHUB_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.oauth.github.useExistingSecret }}{{ .Values.oauth.github.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-github-credentials{{ end }}
+                key: client-id
+          - name: GITHUB_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.oauth.github.useExistingSecret }}{{ .Values.oauth.github.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-github-credentials{{ end }}
+                key: client-secret
+          - name: GOOGLE_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.oauth.google.useExistingSecret }}{{ .Values.oauth.google.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-google-credentials{{ end }}
+                key: client-id
+          - name: GOOGLE_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.oauth.google.useExistingSecret }}{{ .Values.oauth.google.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-google-credentials{{ end }}
+                key: client-secret
+          - name: FACEBOOK_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.oauth.facebook.useExistingSecret }}{{ .Values.oauth.facebook.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-facebook-credentials{{ end }}
+                key: client-id
+          - name: FACEBOOK_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.oauth.facebook.useExistingSecret }}{{ .Values.oauth.facebook.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-facebook-credentials{{ end }}
+                key: client-secret
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

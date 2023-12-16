@@ -116,6 +116,33 @@ mail:
     address: "null"
     name: "null"
 
+oauth:
+  google:
+    clientId: "null"
+    clientSecret: "null"
+    useExistingSecret: false
+    existingSecretName: ""
+  github:
+    clientId: "null"
+    clientSecret: "null"
+    useExistingSecret: false
+    existingSecretName: ""
+  facebook:
+    clientId: "null"
+    clientSecret: "null"
+    useExistingSecret: false
+    existingSecretName: ""
+
+cashier:
+  currency: "AUD"
+  locale: "en_AU"
+
+cdnUrl: "null"
+
+analytics:
+  google:
+    analyticsId: "null"
+
 # Persistent volume settings
 persistence:
   enabled: true
@@ -154,13 +181,13 @@ service:
   port: 80
 
 ingress:
-  enabled: false
+  enabled: true
   className: ""
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: chart-example.local
+    - host: atichoke3d.test
       paths:
         - path: /
           pathType: ImplementationSpecific
