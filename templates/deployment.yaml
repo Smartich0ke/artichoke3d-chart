@@ -220,6 +220,11 @@ spec:
               secretKeyRef:
                 name: {{ if .Values.oauth.facebook.useExistingSecret }}{{ .Values.oauth.facebook.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-facebook-credentials{{ end }}
                 key: client-secret
+          - name: GOOGLE_ANALYTICS_ID
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: GOOGLE_ANALYTICS_ID
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
