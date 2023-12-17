@@ -193,38 +193,63 @@ spec:
           - name: GITHUB_CLIENT_ID
             valueFrom:
               secretKeyRef:
-                name: {{ if .Values.oauth.github.useExistingSecret }}{{ .Values.oauth.github.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-github-credentials{{ end }}
+                name: {{ if .Values.oauth.github.useExistingSecret }}{{ .Values.oauth.github.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-github-oauth-credentials{{ end }}
                 key: client-id
           - name: GITHUB_CLIENT_SECRET
             valueFrom:
               secretKeyRef:
-                name: {{ if .Values.oauth.github.useExistingSecret }}{{ .Values.oauth.github.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-github-credentials{{ end }}
+                name: {{ if .Values.oauth.github.useExistingSecret }}{{ .Values.oauth.github.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-github-oauth-credentials{{ end }}
                 key: client-secret
           - name: GOOGLE_CLIENT_ID
             valueFrom:
               secretKeyRef:
-                name: {{ if .Values.oauth.google.useExistingSecret }}{{ .Values.oauth.google.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-google-credentials{{ end }}
+                name: {{ if .Values.oauth.google.useExistingSecret }}{{ .Values.oauth.google.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-google-oauth-credentials{{ end }}
                 key: client-id
           - name: GOOGLE_CLIENT_SECRET
             valueFrom:
               secretKeyRef:
-                name: {{ if .Values.oauth.google.useExistingSecret }}{{ .Values.oauth.google.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-google-credentials{{ end }}
+                name: {{ if .Values.oauth.google.useExistingSecret }}{{ .Values.oauth.google.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-google-oauth-credentials{{ end }}
                 key: client-secret
           - name: FACEBOOK_CLIENT_ID
             valueFrom:
               secretKeyRef:
-                name: {{ if .Values.oauth.facebook.useExistingSecret }}{{ .Values.oauth.facebook.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-facebook-credentials{{ end }}
+                name: {{ if .Values.oauth.facebook.useExistingSecret }}{{ .Values.oauth.facebook.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-facebook-oauth-credentials{{ end }}
                 key: client-id
           - name: FACEBOOK_CLIENT_SECRET
             valueFrom:
               secretKeyRef:
-                name: {{ if .Values.oauth.facebook.useExistingSecret }}{{ .Values.oauth.facebook.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-facebook-credentials{{ end }}
+                name: {{ if .Values.oauth.facebook.useExistingSecret }}{{ .Values.oauth.facebook.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-facebook-oauth-credentials{{ end }}
                 key: client-secret
           - name: GOOGLE_ANALYTICS_ID
             valueFrom:
               configMapKeyRef:
                 name: {{ include "artichoke3d.fullname" . }}-config
                 key: GOOGLE_ANALYTICS_ID
+          - name: CASHIER_CURRENCY
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: CASHIER_CURRENCY
+          - name: CASHIER_CURRENCY_LOCALE
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: CASHIER_CURRENCY_LOCALE
+          - name: STRIPE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.cashier.stripe.useExistingSecret }}{{ .Values.cashier.stripe.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-stripe-credentials{{ end }}
+                key: stripe-key
+          - name: STRIPE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.cashier.stripe.useExistingSecret }}{{ .Values.cashier.stripe.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-stripe-credentials{{ end }}
+                key: stripe-secret
+          - name: STRIPE_WEBHOOK_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.cashier.stripe.useExistingSecret }}{{ .Values.cashier.stripe.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-stripe-credentials{{ end }}
+                key: stripe-webhook-secret
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

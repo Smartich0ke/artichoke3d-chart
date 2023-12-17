@@ -33,3 +33,6 @@ data:
   MAIL_FROM_NAME: '{{ .Values.mail.from.name }}'
 
   GOOGLE_ANALYTICS_ID: '{{ .Values.analytics.google.analyticsId }}'
+
+  CASHIER_CURRENCY: '{{ .Values.cashier.currency }}'
+  CASHIER_CURRENCY_LOCALE: '{{ .Values.cashier.locale }}'

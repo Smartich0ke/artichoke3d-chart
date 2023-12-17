@@ -31,9 +31,11 @@ appDebug: "false"
 # The URL where the app can be reached
 appUrl: "http://localhost"
 
-# Weather or not to use an external secret for the app key. If true, the key must be "app-key".
+# The app key used for encryption. This cannot be left blank. Generate a new one with "php artisan key:generate".
 appKey:
-  key: "base64:2eu61/Ld0YwEUgXYNrrO19fvKw2ylo6J+el0p3U5V4U="
+  key: "null"
+
+  # Optionally, you can use an existing secret to store the app key. If you do, the key above will be ignored. Use the key "key" in the secret.  
   useExistingSecret: false
   existingSecretName: ""
 
@@ -136,6 +138,12 @@ oauth:
 cashier:
   currency: "AUD"
   locale: "en_AU"
+  stripe:
+    key: "null"
+    secretKey: "null"
+    webhookSecret: "null"
+    useExistingSecret: false
+    existingSecretName: ""
 
 cdnUrl: "null"
 
