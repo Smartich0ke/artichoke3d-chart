@@ -1,3 +1,4 @@
+{{ if .Values.queueWorker.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -6,7 +7,8 @@ metadata:
     {{- include "artichoke3d.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.queueWorker.replicaCount }}
+  {{- end }}
   {{- end }}
   selector:
     matchLabels:
@@ -36,7 +38,7 @@ spec:
           emptyDir: {}
           {{ end }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ .Chart.Name }}-queuw-worker
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -76,3 +78,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{ end }}

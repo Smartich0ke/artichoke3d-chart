@@ -39,9 +39,15 @@ appDebug: "false"
 appUrl: "http://localhost"
 
 # @section taskScheduler
-# Configuration for task scheduling in the application. Runs a cronjob every minute.
+# Configuration for running scheduled tasks in the application. Runs a cronjob every minute.
 taskScheduler:
   enabled: true  # Enable or disable the task scheduler.
+
+# @section queueWorker
+# Configuration for a seperate queue worker deployment for long-running tasks.
+queueWorker:
+  enabled: true
+  replicaCount: 1  # Number of replicas to deploy for the queue worker.
 
 # @section appKey
 # Configuration for the application's encryption key.
