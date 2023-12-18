@@ -36,3 +36,7 @@ data:
 
   CASHIER_CURRENCY: '{{ .Values.cashier.currency }}'
   CASHIER_CURRENCY_LOCALE: '{{ .Values.cashier.locale }}'
+
+  SOCIALS_YOUTUBE: '{{ .Values.socials.youtube }}'
+  SOCIALS_INSTAGRAM: '{{ .Values.socials.instagram }}'
+  SOCIALS_GITHUB: '{{ .Values.socials.github }}'

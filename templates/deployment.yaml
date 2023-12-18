@@ -112,6 +112,21 @@ spec:
               secretKeyRef:
                 name: {{ if .Values.auspostApi.useExistingSecret }}{{ .Values.auspostApi.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-auspost-api-credentials{{ end }}
                 key: api-key
+          - name: SOCIALS_YOUTUBE
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: SOCIALS_YOUTUBE
+          - name: SOCIALS_INSTAGRAM
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: SOCIALS_INSTAGRAM
+          - name: SOCIALS_GITHUB
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: SOCIALS_GITHUB
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

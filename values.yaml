@@ -197,6 +197,11 @@ auspostApi:
   useExistingSecret: false  # Use existing secret for Australia Post API.
   existingSecretName: "" # Existing secret name for Australia Post API. Use the key "api-key" in the secret.
 
+socials:
+  youtube: "null" # YouTube channel URL.
+  instagram: "null" # Instagram profile URL.
+  github: "null" # github profile URL.
+
 # @param cdnUrl
 # URL for the Content Delivery Network (CDN).
 cdnUrl: "null"
