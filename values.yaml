@@ -44,9 +44,11 @@ appKey:
 
 # Whether or not to create an initial admin user. If using external secret, keys bust be "email", "name", and "password".
 initialAdminUser:
+  enabled: true
   useExistingSecret: false
   existingSecretName: ""
   name: "admin"
+  username: "admin"
   email: "admin@example.com"
   password: "ChangeMeNow!"
 
