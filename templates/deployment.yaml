@@ -127,6 +127,11 @@ spec:
               configMapKeyRef:
                 name: {{ include "artichoke3d.fullname" . }}-config
                 key: SOCIALS_GITHUB
+          - name: IMAGE_CDN_URL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "artichoke3d.fullname" . }}-config
+                key: IMAGE_CDN_URL
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

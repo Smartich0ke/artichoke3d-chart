@@ -40,3 +40,5 @@ data:
   SOCIALS_YOUTUBE: '{{ .Values.socials.youtube }}'
   SOCIALS_INSTAGRAM: '{{ .Values.socials.instagram }}'
   SOCIALS_GITHUB: '{{ .Values.socials.github }}'
+
+  IMAGE_CDN: '{{ .Values.cdnUrl }}'
