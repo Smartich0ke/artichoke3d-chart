@@ -190,6 +190,13 @@ cashier:
     useExistingSecret: false  # Use existing secret for Stripe.
     existingSecretName: ""  # Existing secret name for Stripe. Use the keys "stripe-key", "stripe-secret", and "stripe-webhook-secret" in the secret.
 
+# @section auspostApi
+# Configuration for the Australia Post API.
+auspostApi:
+  key: "null"  # Australia Post API key.
+  useExistingSecret: false  # Use existing secret for Australia Post API.
+  existingSecretName: "" # Existing secret name for Australia Post API. Use the key "api-key" in the secret.
+
 # @param cdnUrl
 # URL for the Content Delivery Network (CDN).
 cdnUrl: "null"

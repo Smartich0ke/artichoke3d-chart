@@ -107,6 +107,11 @@ spec:
               secretKeyRef:
                 name: {{ if .Values.cashier.stripe.useExistingSecret }}{{ .Values.cashier.stripe.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-stripe-credentials{{ end }}
                 key: stripe-webhook-secret
+          - name: AUSPOST
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.auspostApi.useExistingSecret }}{{ .Values.auspostApi.existingSecretName }}{{ else }}{{ include "artichoke3d.fullname" . }}-auspost-api-credentials{{ end }}
+                key: api-key
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
