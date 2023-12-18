@@ -9,7 +9,6 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.queueWorker.replicaCount }}
   {{- end }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "artichoke3d.selectorLabels" . | nindent 6 }}
