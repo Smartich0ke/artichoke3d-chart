@@ -11,176 +11,227 @@
 #
 # - Steve Wilson, "The Harmony Codex"
 
-replicaCount: 1
+# @param replicaCount
+# Number of replicas to deploy for the Artichoke3D application.
+replicaCount: 3
 
+# @section image
+# Configuration for the application's Docker image.
 image:
-  repository: harbor.artichokenetwork.com/artichoke3d/artichoke3d-web
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "0.1.1"
+  repository: harbor.artichokenetwork.com/artichoke3d/artichoke3d-web  # Docker image repository.
+  pullPolicy: IfNotPresent  # Image pull policy (e.g., IfNotPresent, Always).
+  tag: "0.1.1"  # Image tag, default is the chart appVersion.
 
-# The name of the app to be shown on web pages
-appName: "artichoke3d"
+# @param appName
+# The name of the application to be displayed on web pages.
+appName: "Artichoke3D"
 
-# The production environment (should always be production)
+# @param appEnv
+# The environment where the app is deployed, e.g., production, staging.
 appEnv: "production"
 
-# Weather or not the app show detailed error messages
+# @param appDebug
+# Flag for displaying detailed error messages (should be false in production).
 appDebug: "false"
 
-# The URL where the app can be reached
+# @param appUrl
+# URL where the application is accessible.
 appUrl: "http://localhost"
 
+# @section taskScheduler
+# Configuration for task scheduling in the application. Runs a cronjob every minute.
 taskScheduler:
-  enabled: true
+  enabled: true  # Enable or disable the task scheduler.
 
-# The app key used for encryption. This cannot be left blank. Generate a new one with "php artisan key:generate".
+# @section appKey
+# Configuration for the application's encryption key.
+# This MUST be set and cannot be changed after deployment. Use "php artisan key:generate" to generate a new key.
 appKey:
-  key: "null"
+  key: "null"  # Encryption key, use 'php artisan key:generate' to generate.
+  useExistingSecret: false  # Flag to use an existing Kubernetes secret.
+  existingSecretName: ""  # Name of existing secret if useExistingSecret is true. Use the key "key" in the secret.
 
-  # Optionally, you can use an existing secret to store the app key. If you do, the key above will be ignored. Use the key "key" in the secret.  
-  useExistingSecret: false
-  existingSecretName: ""
-
-# Whether or not to create an initial admin user. If using external secret, keys bust be "email", "name", and "password".
+# @section initialAdminUser
+# Configuration for creating an initial admin user.
 initialAdminUser:
-  enabled: true
-  useExistingSecret: false
-  existingSecretName: ""
-  name: "admin"
-  username: "admin"
-  email: "admin@example.com"
-  password: "ChangeMeNow!"
+  enabled: true  # Toggle the creation of an initial admin user.
+  useExistingSecret: false  # Use an existing secret for admin user details.
+  existingSecretName: ""  # Name of existing secret for admin details. Use the keys "email", "name", "username", and "password" in the secret.
+  name: "Some Rando"  # Admin user's name
+  username: "admin"  # Admin user's username.
+  email: "admin@example.com"  # Admin user's email.
+  password: "wittenoom"  # Admin user's password.
 
-# Log settings
+# @param logChannel
+# Channel used for logging, e.g., stack, single.
 logChannel: "stack"
+
+# @param logLevel
+# Level of logging, e.g., debug, info, warning, error.
 logLevel: "warning"
 
-# The database connection settings
-# Database configuration
+# @section database
+# Configuration for the application's database.
 database:
-  externalDatabase: false
+  externalDatabase: false  # Flag to use an external database.
   auth:
-    driver: "pgsql"
-    host: "ferrite-postgres"
-    port: "5432"
-    database: "ferrite"
-    username: "ferrite-user"
-    password: "ReallyStrongPassword"
-    useExistingSecret: false
-    existingSecretName: ""
+    driver: "pgsql"  # Database driver, e.g., pgsql, mysql.
+    host: "artichoke3d-postgres"  # Database host.
+    port: "5432"  # Database port.
+    database: "artichoke3d"  # Database name.
+    username: "artichoke3d"  # Database username.
+    password: "blue-sky-mine"  # Database password.
+    useExistingSecret: false  # Use existing secret for database credentials. Use the keys "username" and "password" in the secret.
+    existingSecretName: ""  # Existing secret name for database credentials.
 
-# PostgreSQL chart configuration
+# @section postgresql
+# Configuration for the Bitnami PostgreSQL chart. Disable if using an external database.
+# See https://artifacthub.io/packages/helm/bitnami/postgresql for more details.
 postgresql:
-  enabled: true
+  enabled: true  # Enable or disable the chart.
+  # Credentials here MUST match the database.auth settings above.
   auth:
-    username: artichoke3d
-    password: PleaseChangeMe!
-    database: artichoke3d
+    username: artichoke3d  # PostgreSQL username.
+    password: "blue-sky-mine"  # PostgreSQL password.
+    database: artichoke3d  # PostgreSQL database.
   service:
     ports:
-      postgres: 5432
-  # Other PostgreSQL configurations...
+      postgres: 5432  # PostgreSQL service port.
+  # More PostgreSQL configurations...
 
-# The cache, session and queue drivers
+# @section cache
+# Configuration for the cache driver.
 cache:
-  driver: "redis"
+  driver: "redis"  # Cache driver, e.g., redis, memcached.
+
+# @section session
+# Configuration for the session driver.
 session:
-  driver: "redis"
+  driver: "redis"  # Session driver, e.g., redis, file.
+
+# @section queue
+# Configuration for the queue connection.
 queue:
-  connection: "redis"
+  connection: "redis"  # Queue connection, e.g., redis, sqs.
 
-# The redis connection settings
+# @section redis
+# Redis connection settings.
 redis:
-  externalRedis: false
-  driver: "predis"
+  externalRedis: false  # Flag to use an external Redis server.
+  driver: "predis"  # Redis driver, e.g., predis, phpredis.
   auth:
-    host: "ferrite-redis"
-    password: ""
-    port: "6379"
-    useExistingSecret: false
-    existingSecretName: ""
+    host: "ferrite-redis"  # Redis host.
+    password: ""  # Redis password.
+    port: "6379"  # Redis port.
+    useExistingSecret: false  # Use existing secret for Redis credentials. Use the key "password" in the secret.
+    existingSecretName: ""  # Existing secret name for Redis credentials.
 
+# @section redischart
+# Configuration for the Bitnami Redis chart. Disable if using an external Redis server.
+# See https://artifacthub.io/packages/helm/bitnami/redis for more details.
 redischart:
-  enabled: true
+  enabled: true  # Enable or disable Redis chart.
   auth:
-    password: "ReallyStrongPassword"
+    password: ""  # Redis chart password. This MUST match the redis.auth.password setting above.
   service:
     ports:
-      redis: 6379
-  
+      redis: 6379  # Redis service port.
 
+# @section mail
+# Mail service configuration.
 mail:
-  driver: "smtp"
-  host: "smtp.example.com"
-  port: "587"
-  username: "null"
-  password: "null"
-  encryption: "null"
-  useExistingSecret: false
-  existingSecretName: ""
-  from: 
-    address: "null"
-    name: "null"
+  driver: "smtp"  # Mail driver, e.g., smtp, sendmail.
+  host: "smtp.example.com"  # SMTP host.
+  port: "587"  # SMTP port.
+  username: "null"  # SMTP username.
+  password: "null"  # SMTP password.
+  encryption: "null"  # SMTP encryption, e.g., tls, ssl.
+  useExistingSecret: false  # Use existing secret for mail credentials.
+  existingSecretName: ""  # Existing secret name for mail credentials. Use the keys "username" and "password" in the secret.
+  from:
+    address: "null"  # From email address.
+    name: "null"  # From name.
 
+# @section oauth
+# OAuth configuration for providers like Google, GitHub, Facebook.
+# If using existing secrets, use the keys "client-id" and "client-secret" in the secret for all providers.
 oauth:
   google:
-    clientId: "null"
-    clientSecret: "null"
-    useExistingSecret: false
-    existingSecretName: ""
+    clientId: "null"  # Google client ID.
+    clientSecret: "null"  # Google client secret.
+    useExistingSecret: false  # Use existing secret for Google OAuth.
+    existingSecretName: ""  # Existing secret name for Google OAuth.
   github:
-    clientId: "null"
-    clientSecret: "null"
-    useExistingSecret: false
-    existingSecretName: ""
+    clientId: "null"  # GitHub client ID.
+    clientSecret: "null"  # GitHub client secret.
+    useExistingSecret: false  # Use existing secret for GitHub OAuth.
+    existingSecretName: ""  # Existing secret name for GitHub OAuth.
   facebook:
-    clientId: "null"
-    clientSecret: "null"
-    useExistingSecret: false
-    existingSecretName: ""
+    clientId: "null"  # Facebook client ID.
+    clientSecret: "null"  # Facebook client secret.
+    useExistingSecret: false  # Use existing secret for Facebook OAuth.
+    existingSecretName: ""  # Existing secret name for Facebook OAuth.
 
+# @section cashier
+# Configuration for the cashier service.
 cashier:
-  currency: "AUD"
-  locale: "en_AU"
+  currency: "AUD"  # Currency for transactions.
+  locale: "en_AU"  # Locale setting.
   stripe:
-    key: "null"
-    secretKey: "null"
-    webhookSecret: "null"
-    useExistingSecret: false
-    existingSecretName: ""
+    key: "null"  # Stripe key.
+    secretKey: "null"  # Stripe secret key.
+    webhookSecret: "null"  # Stripe webhook secret.
+    useExistingSecret: false  # Use existing secret for Stripe.
+    existingSecretName: ""  # Existing secret name for Stripe. Use the keys "stripe-key", "stripe-secret", and "stripe-webhook-secret" in the secret.
 
+# @param cdnUrl
+# URL for the Content Delivery Network (CDN).
 cdnUrl: "null"
 
+# @section analytics
+# Configuration for analytics, e.g., Google Analytics.
 analytics:
   google:
-    analyticsId: "null"
+    analyticsId: "null"  # Google Analytics ID.
 
-# Persistent volume settings
+# @section persistence
+# Configuration for persistent volume storage.
 persistence:
-  enabled: true
-  storageClass: ""
-  accessMode: ReadWriteOnce
-  size: 1Gi
+  enabled: true  # Enable or disable persistent volume.
+  storageClass: ""  # Storage class for persistent volume.
+  accessMode: ReadWriteOnce  # Access mode for the volume.
+  size: 1Gi  # Size of the persistent volume.
 
+# @param imagePullSecrets
+# Array of image pull secrets names.
 imagePullSecrets: []
+
+# @param nameOverride
+# Override the name of the chart.
 nameOverride: ""
+
+# @param fullnameOverride
+# Override the full name of the chart.
 fullnameOverride: ""
 
+# @section serviceAccount
+# Configuration for Kubernetes service account.
 serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  create: true  # Whether to create a service account.
+  annotations: {}  # Annotations to add to the service account.
+  name: ""  # Name of the service account.
 
+# @param podAnnotations
+# Annotations to be added to pods.
 podAnnotations: {}
 
+# @param podSecurityContext
+# Security context for the pod.
 podSecurityContext: {}
   # fsGroup: 2000
 
+# @param securityContext
+# Security context for containers in the pod.
 securityContext: {}
   # capabilities:
   #   drop:
@@ -189,18 +240,20 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
+# @section service
+# Configuration for the Kubernetes service.
 service:
-  type: ClusterIP
-  port: 80
+  type: ClusterIP  # Service type, e.g., ClusterIP, NodePort.
+  port: 80  # Service port.
 
 ingress:
-  enabled: true
+  enabled: false
   className: ""
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: atichoke3d.test
+    - host: artichoke3d.test
       paths:
         - path: /
           pathType: ImplementationSpecific
