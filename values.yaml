@@ -31,6 +31,9 @@ appDebug: "false"
 # The URL where the app can be reached
 appUrl: "http://localhost"
 
+taskScheduler:
+  enabled: true
+
 # The app key used for encryption. This cannot be left blank. Generate a new one with "php artisan key:generate".
 appKey:
   key: "null"
