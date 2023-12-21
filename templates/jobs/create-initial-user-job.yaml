@@ -39,4 +39,3 @@ spec:
                 key: password
       restartPolicy: OnFailure
       dnsPolicy: ClusterFirst
-      backoffLimit: 5
