@@ -41,4 +41,4 @@ data:
   SOCIALS_INSTAGRAM: '{{ .Values.socials.instagram }}'
   SOCIALS_GITHUB: '{{ .Values.socials.github }}'
 
-  IMAGE_CDN: '{{ .Values.cdnUrl }}'
+  IMAGE_CDN_URL: '{{ .Values.cdnUrl }}'
